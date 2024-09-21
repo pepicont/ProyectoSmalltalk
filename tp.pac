@@ -147,7 +147,6 @@ apellido: anObject
 	apellido := anObject!
 
 cargaDatos
-|nombre apellido matricula especialidad|
 nombre := Prompter prompt: 'Ingrese el nombre del médico a ingresar'.
 apellido := Prompter prompt: 'Ingrese el apellido del médico a ingresar'.
 matricula := Prompter prompt: 'Ingrese la matricula del médico a ingresar'. 
@@ -292,8 +291,8 @@ dni
 dni: anObject
 	dni := anObject!
 
-incializa
-operaciones:= OrderedCollection new. !
+inicializa
+operaciones := OrderedCollection new. !
 
 nombre
 	^nombre!
@@ -329,7 +328,7 @@ apellido:!accessing!private! !
 cargaDatos!public! !
 dni!accessing!private! !
 dni:!accessing!private! !
-incializa!public! !
+inicializa!public! !
 nombre!accessing!private! !
 nombre:!accessing!private! !
 operaciones!accessing!private! !
@@ -376,7 +375,7 @@ altaIntervencion
 
 cargaDatos
 |opc paciente intervencion medico complejo|
-opc:=Prompter prompt: '¿Que quiere ingresar?/1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Intervenciones'.
+opc:=(Prompter prompt: '¿Que quiere ingresar?/1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Intervenciones') asNumber .
 (opc=1) ifTrue: [
 			paciente:=Paciente new.
 			paciente inicializa.
