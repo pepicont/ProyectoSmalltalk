@@ -440,7 +440,7 @@ AltaComplejidad comment: ''!
 
 cargaDatos
 super cargaDatos.
-precio:=precio + (AltaComplejidad PorcenAdicional)!
+precio:=precio + precio*PorcenAdicional.!
 
 cargarDatos!
 
