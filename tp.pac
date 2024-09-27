@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -41,7 +41,7 @@ Object subclass: #Medico
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 Object subclass: #Operacion
-	instanceVariableNames: 'fecha id intervencion medico pagado'
+	instanceVariableNames: 'fecha id intervencion medico pagado montoAPagar'
 	classVariableNames: 'Identificador'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
@@ -83,7 +83,6 @@ Intervencion comment: ''!
 !Intervencion methodsFor!
 
 cargaDatos
-|codigo descripcion especialidad precio|
 codigo := Prompter prompt: 'Ingrese el código de la intervención: '.
 descripcion := Prompter prompt: 'Ingrese la descripcion de la intervención: '.
 especialidad := Prompter prompt: 'Ingrese la especialidad de la intervención: '.
@@ -93,8 +92,6 @@ precio := Prompter prompt: 'Ingrese el precio de la intervención: '.
 
 
 !
-
-cargarDatos!
 
 codigo
 	^codigo!
@@ -123,7 +120,6 @@ precio: anObject
 traerDatos! !
 !Intervencion categoriesForMethods!
 cargaDatos!public! !
-cargarDatos!public! !
 codigo!accessing!private! !
 codigo:!accessing!private! !
 descripcion!accessing!private! !
@@ -165,6 +161,11 @@ especialidad
 especialidad: anObject
 	especialidad := anObject!
 
+info
+	|header|
+	header:= 'Médico: ', nombre, ' ', apellido, ' Matricula: ', matricula.
+^header!
+
 matricula
 	^matricula!
 
@@ -188,6 +189,7 @@ condicion!accessing!private! !
 condicion:!accessing!private! !
 especialidad!accessing!private! !
 especialidad:!accessing!private! !
+info!public! !
 matricula!accessing!private! !
 matricula:!accessing!private! !
 nombre!accessing!private! !
@@ -201,12 +203,31 @@ Operacion comment: ''!
 !Operacion categoriesForClass!Kernel-Objects! !
 !Operacion methodsFor!
 
-cargaDatos
+cargaDatos:anObject
 fecha:= Date fromString: (Prompter prompt: 'Ingrese la fecha de la operación' ) .
 id:= Identificador.
 Operacion aumentoIdentificador.
-intervencion:=Prompter prompt: 'Ingrese la operación a efectuarse: '.
-medico:=Prompter prompt: 'Ingrese el médico que va a realizar la operación'.
+intervencion:= anObject.
+"intervencion:=Prompter prompt: 'Ingrese el código de la operación a efectuarse: '."
+medico:=Prompter prompt: 'Ingrese nombre y apellido del médico que va a realizar la operación'.
+pagado:= Prompter prompt: 'Ingrese 1-Pagado/2-Pendiente de pago'.
+
+
+
+
+
+
+!
+
+cargaDatos:anObject a: anotherObject
+fecha:= Date fromString: (Prompter prompt: 'Ingrese la fecha de la operación' ) .
+id:= Identificador.
+Operacion aumentoIdentificador.
+intervencion:= anObject.
+montoAPagar:= intervencion precio.
+"intervencion:=Prompter prompt: 'Ingrese el código de la operación a efectuarse: '."
+medico:=anotherObject.
+pagado:= Prompter prompt: 'Ingrese 1-Pagado/2-Pendiente de pago'.
 
 
 
@@ -227,6 +248,11 @@ id
 id: anObject
 	id := anObject!
 
+info
+	|header|
+	header:= 'Identificador: ', id displayString, ' ', 'Fecha: ',fecha displayString, String cr,String tab, String tab,' Descripción: ', intervencion descripcion, String tab,'Monto: ' montoAPagar.
+^header!
+
 intervencion
 	^intervencion!
 
@@ -245,11 +271,13 @@ pagado
 pagado: anObject
 	pagado := anObject! !
 !Operacion categoriesForMethods!
-cargaDatos!public! !
+cargaDatos:!public! !
+cargaDatos:a:!public! !
 fecha!accessing!private! !
 fecha:!accessing!private! !
 id!accessing!private! !
 id:!accessing!private! !
+info!public! !
 intervencion!accessing!private! !
 intervencion:!accessing!private! !
 medico!accessing!private! !
@@ -262,9 +290,13 @@ pagado:!accessing!private! !
 
 aumentoIdentificador
 Identificador:=Identificador+1.
-! !
+!
+
+inicializar
+	Identificador:=0.! !
 !Operacion class categoriesForMethods!
 aumentoIdentificador!public! !
+inicializar!public! !
 !
 
 Paciente guid: (GUID fromString: '{217f8510-1557-4bcb-b9a6-bda460760c44}')!
@@ -285,11 +317,22 @@ apellido :=Prompter prompt: 'ingrese apellido del paciente '.
 telefono :=Prompter prompt: 'ingrese telefono del paciente '.
 !
 
+cargaDatos:anObject
+dni:=anObject.
+nombre :=Prompter prompt: 'ingrese nombre del paciente '.
+apellido :=Prompter prompt: 'ingrese apellido del paciente '.
+telefono :=Prompter prompt: 'ingrese telefono del paciente '.!
+
 dni
 	^dni!
 
 dni: anObject
 	dni := anObject!
+
+info
+	|header|
+	header:= 'Nombre: ', nombre, ' ', apellido, ' Obra Social: ---'.
+^header!
 
 inicializa
 operaciones := OrderedCollection new. !
@@ -326,8 +369,10 @@ traerDatos! !
 apellido!accessing!private! !
 apellido:!accessing!private! !
 cargaDatos!public! !
+cargaDatos:!public! !
 dni!accessing!private! !
 dni:!accessing!private! !
+info!public! !
 inicializa!public! !
 nombre!accessing!private! !
 nombre:!accessing!private! !
@@ -347,37 +392,36 @@ Sanatorio comment: ''!
 !Sanatorio methodsFor!
 
 altaIntervencion
-	| operacion paciente dni ob flag1 flag2 |
+	| operacion paciente dni ob flag1 flag2 inter inttemp med medint|
 	dni:= Prompter prompt:'Ingrese dni del paciente'.
 	paciente:= pacientes detect:[:pas| pas dni = dni ] "Busca el paciente del dni ingresado en la colección de pacientes"
-				ifNone: [ ob:=Prompter prompt: '¿TIene obra social? 1-Si/2-No'. "Pregunta si el ingresado tiene o no obra social"
+				ifNone: [ ob:=Prompter prompt: '¿Tiene obra social? 1-Si/2-No'. "Pregunta si el ingresado tiene o no obra social"
 						(ob=1) ifTrue: [paciente:= PacienteConObra new] 
 								ifFalse:[
 									paciente:= Paciente new].
-						paciente inicializa. "inicializa la ordered collection de operaciones del paciente"
-						paciente cargaDatos."Carga los datos del paciente"
+						paciente inicializa. "inicializa la ordered collection de operaciones del paciente" 
+						paciente cargaDatos:dni."Carga los datos del paciente"
 						pacientes add:paciente]. "Agrega el paciente registrado a la colección de pacientes del sanatorio"
 	operacion:= Operacion new.
-	operacion cargaDatos. "Carga el id, la fecha, la intervención y el médico"
-	flag1:=0.
-	flag2:=0.
-	intervenciones do:[ :int | (int=operacion intervencion) ifTrue: [flag1:=1]]. "Busca la intervención cargada en la coleccion de intervenciones" "!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-
-	medicos do: [:medic | (medic=operacion medico) ifTrue:[flag2:=1]]. "Busca el médico cargado en la colección de medicos"
+	inttemp:= Prompter prompt: 'Ingrese el código de la intervención a realizar'. "NUEVA LINEA"
+	flag1:=1.
+	flag2:=1.
+	inter:= intervenciones detect:[:in | (in codigo)=inttemp ] ifNone: [flag1:=0].  "NUEVA LINEA"
+	medint:= Prompter prompt:'Ingrese matricula del médico'.
+	med:= medicos detect: [:med1 | (med1 matricula) = medint] ifNone:[flag2:=0].
+	(flag1=1) ifTrue:[operacion cargaDatos: inter a: med]. "Carga el id, la fecha, la intervención y el médico" "MODIFICACIÓN DE LINEA"
+	"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	(flag1=0) ifTrue: [MessageBox notify:'La intervención cargada no esta en la colección de intervenciones'].
 	(flag2=0) ifTrue: [MessageBox notify: 'El médico ingresado no se encuentra en la colección de médicos' ].
 	((flag1=1)and: [flag2=1] ) ifTrue: [paciente operar:operacion].
 		!
 
 cargaDatos
-|opc paciente intervencion medico complejo|
-opc:=(Prompter prompt: '¿Que quiere ingresar?/1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Intervenciones') asNumber .
+|opc paciente intervencion medico complejo op|
+opc:=(Prompter prompt: '1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Intervenciones') asNumber .
 (opc=1) ifTrue: [
-			paciente:=Paciente new.
+			op:= Prompter prompt: 'El paciente tiene obra? 1-Si/2-No'.
+			(op=1) ifTrue:[paciente:= PacienteConObra new] ifFalse:[paciente:= Paciente new].
 			paciente inicializa.
 			paciente cargaDatos.
 			pacientes add:paciente.
@@ -401,7 +445,8 @@ inicializa
 	pacientes:= OrderedCollection new.
 	medicos:= OrderedCollection new.
 	intervenciones:= OrderedCollection new.
-	AltaComplejidad inicializar.!
+	AltaComplejidad inicializar. "PREGUNTAR A AGUS QUÉ ES ESTO"
+	Operacion inicializar. "agregado"!
 
 intervenciones
 	^intervenciones!
@@ -419,7 +464,12 @@ pacientes
 	^pacientes!
 
 pacientes: anObject
-	pacientes := anObject! !
+	pacientes := anObject!
+
+reporteLiquidaciones
+	pacientes do:[:paciente | (paciente operaciones) do:[:operacion | ((operacion pagado='2')) ifTrue:[Transcript show: paciente info printString;cr;tab;show: operacion info printString;cr;tab; show:operacion medico info printString]]].
+	"Recorre la colección pacientes, luego dentro de pacientes recorre sus operaciones y si la operación no está paga, armamos un header con la info del paciente, medico y la operacion por separado y printeamos todo con TS."
+	"Operacion medico accede al objeto medico dentro de operación y info hace el header con la info del med"! !
 !Sanatorio categoriesForMethods!
 altaIntervencion!public! !
 cargaDatos!public! !
@@ -430,6 +480,7 @@ medicos!accessing!private! !
 medicos:!accessing!private! !
 pacientes!accessing!private! !
 pacientes:!accessing!private! !
+reporteLiquidaciones!public! !
 !
 
 AltaComplejidad guid: (GUID fromString: '{01f3471a-934b-45bb-969d-5bd476675db6}')!
@@ -486,6 +537,11 @@ incializa
 operaciones := OrderedCollection new.
 !
 
+info
+	|header|
+	header:= 'Nombre: ', nombre, ' ', apellido, ' Obra Social: ', nombreObra.
+^header!
+
 montoCobertura
 	^montoCobertura!
 
@@ -507,6 +563,7 @@ traerDatos! !
 !PacienteConObra categoriesForMethods!
 cargaDatos!public! !
 incializa!public! !
+info!public! !
 montoCobertura!accessing!private! !
 montoCobertura:!accessing!private! !
 nombreObra!accessing!private! !
