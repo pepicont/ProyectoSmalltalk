@@ -8,5 +8,7 @@
 	(op = 3) ifTrue:[sanatorio cargaDatos].].
 	
 
+	"hacer pre-carga con objetos"
 
+	
 	
