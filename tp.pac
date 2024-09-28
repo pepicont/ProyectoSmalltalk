@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -226,7 +226,7 @@ pagado:= Prompter prompt: 'Ingrese 1-Pagado/2-Pendiente de pago'.
 !
 
 cargaDatos:anObject a: anotherObject
-fecha:= Date fromString: (Prompter prompt: 'Ingrese la fecha de la operación' ) .
+fecha:= Date fromString: (Prompter prompt: 'Ingrese la fecha de la operación dd/mm/aaaa' ) .
 Operacion aumentoIdentificador.
 id:= Identificador.
 intervencion:= anObject.
@@ -256,7 +256,7 @@ id: anObject
 
 info
 	|header|
-	header:= 'Identificador: ', id displayString, ' ', 'Fecha: ',fecha displayString, String cr,String tab, String tab,' Descripción: ', intervencion descripcion, String tab,'Monto: ' montoAPagar.
+	header:= 'Identificador: ', id displayString, ' ', 'Fecha: ',fecha displayString, String cr,String tab, String tab,' Descripción: ', intervencion descripcion, String tab,'Monto: ', montoAPagar.
 ^header!
 
 intervencion
@@ -424,7 +424,7 @@ altaIntervencion
 	"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	(flag1=0) ifTrue: [MessageBox notify:'La intervención cargada no esta en la colección de intervenciones'].
 	(flag2=0) ifTrue: [MessageBox notify: 'El médico ingresado no se encuentra en la colección de médicos' ].
-	(((flag1=1)and: [flag2=1] )=flag3)  ifTrue: [paciente operar:operacion].
+	((flag1=1 and: [flag2=1]) and: [flag3=1])  ifTrue: [paciente operar:operacion].
 		!
 
 cargaDatos
@@ -456,7 +456,7 @@ checkear: anIntervention a: aDoctor
 |especIntervencion especMedico rta|
 especIntervencion:= anIntervention especialidad.
 especMedico:=aDoctor especialidad.
-(especIntervencion=especMedico) ifTrue: [rta:=0] ifFalse:[rta:=1].
+(especIntervencion=especMedico) ifTrue: [rta:=1] ifFalse:[rta:=0].
 ^rta!
 
 inicializa
@@ -511,7 +511,7 @@ intervenciones add: int. "carga una intervención"
 int:=Intervencion new.
 int codigo: '2'.
 int descripcion: 'Operación de corazón'.
-int especialidad: 'cardiología'.
+int especialidad: 'cardiologia'.
 int precio: '10000'.
 intervenciones add: int.  "Hasta acá cargamos dos intervenciones por defecto para no andar cargando a mano cada vez que"
 						"queremos probar el sistema"
@@ -555,7 +555,8 @@ pacientes add:pac. "Cargamos otro paciente"
 !
 
 reporteLiquidaciones
-	pacientes do:[:paciente | (paciente operaciones) do:[:operacion | ((operacion pagado='2')) ifTrue:[Transcript show: paciente info printString;cr;tab;show: operacion info printString;cr;tab; show:operacion medico info printString]]].
+	Transcript clear.
+	pacientes do:[:paciente | (paciente operaciones) do:[:operacion | ((operacion pagado='2')) ifTrue:[Transcript show: paciente info printString;cr;tab;show: operacion info printString;cr;tab;tab;tab; show:operacion medico info printString;cr;cr]]].
 	"Recorre la colección pacientes, luego dentro de pacientes recorre sus operaciones y si la operación no está paga, armamos un header con la info del paciente, medico y la operacion por separado y printeamos todo con TS."
 	"Operacion medico accede al objeto medico dentro de operación y info hace el header con la info del med"! !
 !Sanatorio categoriesForMethods!
