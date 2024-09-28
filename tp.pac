@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -111,6 +111,11 @@ especialidad
 especialidad: anObject
 	especialidad := anObject!
 
+info 
+|informacion|
+informacion:='Codigo: ',codigo, String tab,'Descripción: ',descripcion,String tab,'Especialidad: ',especialidad,String tab,'Precio: ',precio.
+^informacion!
+
 precio
 	^precio!
 
@@ -126,6 +131,7 @@ descripcion!accessing!private! !
 descripcion:!accessing!private! !
 especialidad!accessing!private! !
 especialidad:!accessing!private! !
+info!public! !
 precio!accessing!private! !
 precio:!accessing!private! !
 traerDatos!public! !
@@ -163,7 +169,7 @@ especialidad: anObject
 
 info
 	|header|
-	header:= 'Médico: ', nombre, ' ', apellido, ' Matricula: ', matricula.
+	header:= 'Médico: ', nombre, ' ', apellido,String tab,' Matricula: ', matricula.
 ^header!
 
 matricula
@@ -221,8 +227,8 @@ pagado:= Prompter prompt: 'Ingrese 1-Pagado/2-Pendiente de pago'.
 
 cargaDatos:anObject a: anotherObject
 fecha:= Date fromString: (Prompter prompt: 'Ingrese la fecha de la operación' ) .
-id:= Identificador.
 Operacion aumentoIdentificador.
+id:= Identificador.
 intervencion:= anObject.
 montoAPagar:= intervencion precio.
 "intervencion:=Prompter prompt: 'Ingrese el código de la operación a efectuarse: '."
@@ -392,7 +398,8 @@ Sanatorio comment: ''!
 !Sanatorio methodsFor!
 
 altaIntervencion
-	| operacion paciente dni ob flag1 flag2 inter inttemp med medint|
+	| operacion paciente dni ob flag1 flag2 inter inttemp med medint flag3|
+	
 	dni:= Prompter prompt:'Ingrese dni del paciente'.
 	paciente:= pacientes detect:[:pas| pas dni = dni ] "Busca el paciente del dni ingresado en la colección de pacientes"
 				ifNone: [ ob:=Prompter prompt: '¿Tiene obra social? 1-Si/2-No'. "Pregunta si el ingresado tiene o no obra social"
@@ -402,6 +409,8 @@ altaIntervencion
 						paciente inicializa. "inicializa la ordered collection de operaciones del paciente" 
 						paciente cargaDatos:dni."Carga los datos del paciente"
 						pacientes add:paciente]. "Agrega el paciente registrado a la colección de pacientes del sanatorio"
+	MessageBox notify: 'La información de los médicos y las intervenciones está disponible en el Transcript'.
+	self muestra. "Muestra la informaciónd de todos los médicos y las intervenciones cargados"
 	operacion:= Operacion new.
 	inttemp:= Prompter prompt: 'Ingrese el código de la intervención a realizar'. "NUEVA LINEA"
 	flag1:=1.
@@ -409,11 +418,13 @@ altaIntervencion
 	inter:= intervenciones detect:[:in | (in codigo)=inttemp ] ifNone: [flag1:=0].  "NUEVA LINEA"
 	medint:= Prompter prompt:'Ingrese matricula del médico'.
 	med:= medicos detect: [:med1 | (med1 matricula) = medint] ifNone:[flag2:=0].
+	flag3:= self checkear: inter a: med.
+	(flag3=0) ifTrue: [MessageBox notify: 'El médico ingresado no coincide con la especialidad de la intervención' ].
 	(flag1=1) ifTrue:[operacion cargaDatos: inter a: med]. "Carga el id, la fecha, la intervención y el médico" "MODIFICACIÓN DE LINEA"
 	"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	(flag1=0) ifTrue: [MessageBox notify:'La intervención cargada no esta en la colección de intervenciones'].
 	(flag2=0) ifTrue: [MessageBox notify: 'El médico ingresado no se encuentra en la colección de médicos' ].
-	((flag1=1)and: [flag2=1] ) ifTrue: [paciente operar:operacion].
+	(((flag1=1)and: [flag2=1] )=flag3)  ifTrue: [paciente operar:operacion].
 		!
 
 cargaDatos
@@ -441,6 +452,13 @@ opc:=(Prompter prompt: '1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Inter
 
 !
 
+checkear: anIntervention a: aDoctor
+|especIntervencion especMedico rta|
+especIntervencion:= anIntervention especialidad.
+especMedico:=aDoctor especialidad.
+(especIntervencion=especMedico) ifTrue: [rta:=0] ifFalse:[rta:=1].
+^rta!
+
 inicializa
 	pacientes:= OrderedCollection new.
 	medicos:= OrderedCollection new.
@@ -460,11 +478,81 @@ medicos
 medicos: anObject
 	medicos := anObject!
 
+muestra
+"Muestra medicos e intervenciones cargadas"
+Transcript clear.
+Transcript tab;tab;tab;show:'MEDICOS:';cr.
+Transcript show:'----------------------------------------------------------------------------------------------------------------------------';cr.
+
+medicos do:[:med| Transcript show: (med info) printString ;tab;show:'Especialidad: ';show: (med especialidad) printString;tab;cr ].
+Transcript cr.
+Transcript tab;tab;tab;show:'INTERVENCIONES';cr.
+Transcript show:'----------------------------------------------------------------------------------------------------------------------------';cr.
+intervenciones do:[:int|  Transcript show: (int info) printString;cr ].
+
+
+!
+
 pacientes
 	^pacientes!
 
 pacientes: anObject
 	pacientes := anObject!
+
+preCarga
+|int med pac|
+int:=Intervencion new.
+int codigo: '1'.
+int descripcion: 'Apertura de rodilla'.
+int especialidad: 'traumatologia'.
+int precio: '1000'.
+intervenciones add: int. "carga una intervención"
+
+int:=Intervencion new.
+int codigo: '2'.
+int descripcion: 'Operación de corazón'.
+int especialidad: 'cardiología'.
+int precio: '10000'.
+intervenciones add: int.  "Hasta acá cargamos dos intervenciones por defecto para no andar cargando a mano cada vez que"
+						"queremos probar el sistema"
+med:=Medico new.
+med nombre: 'Stefano'.
+med apellido: 'Conti'.
+med matricula:'52850'. 
+med especialidad: 'traumatologia'. 
+med condicion: '2'. "condición=2 significa médico no disponible" 
+medicos add: med. "Cargamos 1 médico"
+
+med:=Medico new.
+med nombre: 'Agustin'.
+med apellido: 'Dana'.
+med matricula:'52935'. 
+med especialidad: 'cardiologia'. 
+med condicion: '1'. "condición=1 significa médico  disponible" 
+medicos add: med. "Cargamos otro médico"
+
+pac:=PacienteConObra new.
+pac nombre:'Agustin'. 
+pac apellido:'Dana'.
+pac inicializa.
+pac nombreObra:'osde'.
+pac montoCobertura:'500' asNumber asInteger .
+pac dni:'45949176'.
+pac telefono:'3413946996'.
+pacientes add:pac.  "Cargamos un paciente"
+
+pac:=Paciente new.
+pac nombre:'Stefano'. 
+pac apellido:'Conti'.
+pac inicializa.
+pac dni:'46132662'.
+pac telefono:'3411233443'.
+pacientes add:pac. "Cargamos otro paciente"
+
+ 
+
+
+!
 
 reporteLiquidaciones
 	pacientes do:[:paciente | (paciente operaciones) do:[:operacion | ((operacion pagado='2')) ifTrue:[Transcript show: paciente info printString;cr;tab;show: operacion info printString;cr;tab; show:operacion medico info printString]]].
@@ -473,13 +561,16 @@ reporteLiquidaciones
 !Sanatorio categoriesForMethods!
 altaIntervencion!public! !
 cargaDatos!public! !
+checkear:a:!public! !
 inicializa!public! !
 intervenciones!accessing!private! !
 intervenciones:!accessing!private! !
 medicos!accessing!private! !
 medicos:!accessing!private! !
+muestra!public! !
 pacientes!accessing!private! !
 pacientes:!accessing!private! !
+preCarga!public! !
 reporteLiquidaciones!public! !
 !
 
@@ -555,7 +646,7 @@ nombreObra: anObject
 	nombreObra := anObject!
 
 operar: anOperacion
-self operar:anOperacion.!
+super operar:anOperacion.!
 
 reporteLiquidaciones!
 
