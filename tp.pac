@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -420,7 +420,7 @@ altaIntervencion
 	med:= medicos detect: [:med1 | (med1 matricula) = medint] ifNone:[flag2:=0].
 	flag3:= self checkear: inter a: med.
 	(flag3=0) ifTrue: [MessageBox notify: 'El médico ingresado no coincide con la especialidad de la intervención' ].
-	(flag1=1) ifTrue:[operacion cargaDatos: inter a: med]. "Carga el id, la fecha, la intervención y el médico" "MODIFICACIÓN DE LINEA"
+	(flag1=1 and:[flag3=1] ) ifTrue:[operacion cargaDatos: inter a: med]. "Carga el id, la fecha, la intervención y el médico" "MODIFICACIÓN DE LINEA"
 	"!!!!!!falta resolver el tema de la disponibilidad del médico!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	(flag1=0) ifTrue: [MessageBox notify:'La intervención cargada no esta en la colección de intervenciones'].
 	(flag2=0) ifTrue: [MessageBox notify: 'El médico ingresado no se encuentra en la colección de médicos' ].
