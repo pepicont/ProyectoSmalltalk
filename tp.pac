@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -120,9 +120,7 @@ precio
 	^precio!
 
 precio: anObject
-	precio := anObject!
-
-traerDatos! !
+	precio := anObject! !
 !Intervencion categoriesForMethods!
 cargaDatos!public! !
 codigo!accessing!private! !
@@ -134,7 +132,6 @@ especialidad:!accessing!private! !
 info!public! !
 precio!accessing!private! !
 precio:!accessing!private! !
-traerDatos!public! !
 !
 
 Medico guid: (GUID fromString: '{36eb3dec-f645-4ffa-97d3-a2a049e71ded}')!
@@ -184,11 +181,7 @@ nombre
 	^nombre!
 
 nombre: anObject
-	nombre := anObject!
-
-reporteLiquidaciones!
-
-traerDatos! !
+	nombre := anObject! !
 !Medico categoriesForMethods!
 apellido!accessing!private! !
 apellido:!accessing!private! !
@@ -202,8 +195,6 @@ matricula!accessing!private! !
 matricula:!accessing!private! !
 nombre!accessing!private! !
 nombre:!accessing!private! !
-reporteLiquidaciones!public! !
-traerDatos!public! !
 !
 
 Operacion guid: (GUID fromString: '{4b2822fc-12b4-4b5d-bc51-22f4dd7cf7c4}')!
@@ -317,7 +308,7 @@ apellido :=Prompter prompt: 'ingrese apellido del paciente '.
 telefono :=Prompter prompt: 'ingrese telefono del paciente '.!
 
 cobertura
-^0!
+^'0'!
 
 dni
 	^dni!
@@ -327,7 +318,7 @@ dni: anObject
 
 info
 	|header|
-	header:= 'Nombre: ', nombre, ' ', apellido, ' Obra Social: ---'.
+	header:= 'Nombre: ', nombre, ' ', apellido, ' DNI: ', dni, ' Obra Social: ---'.
 ^header!
 
 inicializa
@@ -345,22 +336,16 @@ operaciones
 operaciones: anObject
 	operaciones := anObject!
 
-operar!
-
 operar: anOperacion
 self operaciones add: anOperacion.
 
 !
 
-reporteLiquidaciones!
-
 telefono
 	^telefono!
 
 telefono: anObject
-	telefono := anObject!
-
-traerDatos! !
+	telefono := anObject! !
 !Paciente categoriesForMethods!
 apellido!accessing!private! !
 apellido:!accessing!private! !
@@ -375,12 +360,9 @@ nombre!accessing!private! !
 nombre:!accessing!private! !
 operaciones!accessing!private! !
 operaciones:!accessing!private! !
-operar!public! !
 operar:!public! !
-reporteLiquidaciones!public! !
 telefono!accessing!private! !
 telefono:!accessing!private! !
-traerDatos!public! !
 !
 
 Sanatorio guid: (GUID fromString: '{14193734-aa95-4daa-be4c-41a45d316d8e}')!
@@ -605,12 +587,9 @@ cargaDatos
 super cargaDatos.
 recargo:=precio asNumber * PorcenAdicional.
 precio:=(precio asNumber + recargo) asInteger . "porque precio está ingresado como string"
-precio:=precio printString.!
-
-traerDatos! !
+precio:=precio printString.! !
 !AltaComplejidad categoriesForMethods!
 cargaDatos!public! !
-traerDatos!public! !
 !
 
 !AltaComplejidad class methodsFor!
@@ -663,7 +642,7 @@ operaciones := OrderedCollection new.
 
 info
 	|header|
-	header:= 'Nombre: ', nombre, ' ', apellido, ' Obra Social: ', nombreObra.
+	header:= 'Nombre: ', nombre, ' ', apellido, ' DNI: ', dni, ' Obra Social: ', nombreObra.
 ^header!
 
 montoCobertura
@@ -679,11 +658,7 @@ nombreObra: anObject
 	nombreObra := anObject!
 
 operar: anOperacion
-super operar:anOperacion.!
-
-reporteLiquidaciones!
-
-traerDatos! !
+super operar:anOperacion.! !
 !PacienteConObra categoriesForMethods!
 cargaDatos!public! !
 cargaDatos:!public! !
@@ -695,8 +670,6 @@ montoCobertura:!accessing!private! !
 nombreObra!accessing!private! !
 nombreObra:!accessing!private! !
 operar:!public! !
-reporteLiquidaciones!public! !
-traerDatos!public! !
 !
 
 "Binary Globals"!
