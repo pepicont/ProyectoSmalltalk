@@ -401,6 +401,7 @@ altaIntervencion
 						paciente cargaDatos:dni."Carga los datos del paciente"
 						cobertura:= paciente cobertura.
 						pacientes add:paciente]. "Agrega el paciente registrado a la colección de pacientes del sanatorio"
+	cobertura:= paciente cobertura.
 	MessageBox notify: 'La información de los médicos y las intervenciones está disponible en el Transcript'.
 	self muestra. "Muestra la informaciónd de todos los médicos y las intervenciones cargados"
 	operacion:= Operacion new.
@@ -473,9 +474,32 @@ medicos
 medicos: anObject
 	medicos := anObject!
 
+modificar
+|opcion matricula med pac dni cod oper|
+opcion:=(Prompter prompt: '1-Modificar estado Medico/2-Pagar operación/0-Salir') asNumber asInteger.
+(opcion=1) ifTrue: [ MessageBox notify: 'Se han mostrado en el transcript los datos de los médicos'.
+				self muestra. "muestra datos médicos"
+				matricula := Prompter prompt: 'Ingrese la matrícula del médico a modificar'. "ingresa la matricula del médico"
+				med:= medicos detect: [:medico | medico matricula=matricula ] ifNone:[matricula:=0 ]. "busca al médico en la colección medico"
+				(matricula ~= 0) ifTrue: [med condicion:(Prompter prompt: 'Ingrese disponibilidad. 1-disponible/2-No disponible').
+				MessageBox notify: 'La disponibilidad fue cambiada con éxito'.
+ ] ifFalse:[MessageBox notify: 'La matricula ingresada no corresponde a un medico cargado']. ]. "Cambia el estado de un médico"
+(opcion=2) ifTrue: [ self reporteLiquidaciones. "muestra las operaciones pendientes"
+				MessageBox notify: 'Las operaciones en deuda fueron impresas en el Transcript'.
+				dni:=Prompter prompt: 'Ingrese el dni del paciente en deuda'. 
+				pac:= pacientes detect: [:paciente | paciente dni=dni ] ifNone:[dni:=0]. "busca el paciente en la colección pacientes"
+				(dni=0) ifTrue: [MessageBox notify: 'El dni ingresado no corresponde a un paciente cargado' ] ifFalse:[
+				cod:=(Prompter prompt: 'ingrese el código de la operación a pagar') asNumber.
+				oper:= (pac operaciones) detect: [:operacion | operacion id = cod] ifNone:[oper := 0].
+				(oper=0) ifTrue: [MessageBox notify: 'El codigo de operación ingresado es incorrecto' ] ifFalse:[
+				oper pagado:'1'. "Registramos la operación como pagada"
+				MessageBox notify: 'La operación ha sigo pagada con éxito'.
+]]].
+			!
+
 muestra
 "Muestra medicos e intervenciones cargadas"
-"Transcript clear."
+Transcript clear.
 Transcript tab;tab;tab;show:'MEDICOS:';cr.
 Transcript show:'----------------------------------------------------------------------------------------------------------------------------';cr.
 
@@ -563,6 +587,7 @@ intervenciones!accessing!private! !
 intervenciones:!accessing!private! !
 medicos!accessing!private! !
 medicos:!accessing!private! !
+modificar!public! !
 muestra!public! !
 pacientes!accessing!private! !
 pacientes:!accessing!private! !
@@ -615,7 +640,7 @@ nombre :=Prompter prompt: 'ingrese nombre del paciente '.
 apellido :=Prompter prompt: 'ingrese apellido del paciente '.
 telefono :=Prompter prompt: 'ingrese telefono del paciente '.
 nombreObra :=Prompter prompt: 'ingrese obra social del paciente'.
-montoCobertura :=(Prompter prompt: 'ingrese monto de cobertura de la obra del paciente') asNumber asInteger .
+montoCobertura :=Prompter prompt: 'ingrese monto de cobertura de la obra del paciente'.
 
 
 !
