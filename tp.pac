@@ -21,10 +21,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: #(
-	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
-	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
-	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
-	'..\..\Documentos\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\Base\Dolphin Message Box'
+	'..\..\Documents\Dolphin Smalltalk 7\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter').
 
 package!
 
@@ -413,12 +413,12 @@ opc:=(Prompter prompt: '1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Inter
 			(op='1') ifTrue:[paciente:= PacienteConObra new] ifFalse:[paciente:= Paciente new].
 			paciente inicializa.
 			paciente cargaDatos.
-			pacientes add:paciente.
+			pacientes detect:[:ele | ele dni= paciente dni] ifNone:[pacientes add:paciente. MessageBox notify: 'Paciente cargado con éxito'].       
 			].
 (opc=2) ifTrue: [
 			medico:=Medico new.
 			medico cargaDatos.
-			medicos add: medico.
+			medicos detect:[:ele | ele matricula= medico matricula] ifNone:[medicos add:medico. MessageBox notify: 'Médico cargado con éxito'].
 			].
 (opc=3) ifTrue: [
 			complejo:=Prompter prompt: '¿La intervención es de alta complejidad? 1-Si/2-No'.
