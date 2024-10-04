@@ -1,3 +1,0 @@
-cambiar incializar de altacomplejidad por Inicializar
-modificar flags
-modificar diagramaDeClases
