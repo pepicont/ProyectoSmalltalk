@@ -82,8 +82,8 @@ Intervencion comment: ''!
 !Intervencion categoriesForClass!Kernel-Objects! !
 !Intervencion methodsFor!
 
-cargaDatos
-codigo := Prompter prompt: 'Ingrese el código de la intervención: '.
+cargaDatos: aCode
+codigo := aCode .
 descripcion := Prompter prompt: 'Ingrese la descripcion de la intervención: '.
 especialidad := Prompter prompt: 'Ingrese la especialidad de la intervención: '.
 precio := Prompter prompt: 'Ingrese el precio de la intervención: '.
@@ -122,7 +122,7 @@ precio
 precio: anObject
 	precio := anObject! !
 !Intervencion categoriesForMethods!
-cargaDatos!public! !
+cargaDatos:!public! !
 codigo!accessing!private! !
 codigo:!accessing!private! !
 descripcion!accessing!private! !
@@ -151,6 +151,14 @@ apellido := Prompter prompt: 'Ingrese el apellido del médico a ingresar'.
 matricula := Prompter prompt: 'Ingrese la matricula del médico a ingresar'. 
 especialidad := Prompter prompt: 'Ingrese la especialidad del médico a ingresar'.
 condicion:=Prompter prompt: 'Ingrese disponibilidad. 1-disponible/2-No disponible'.
+!
+
+cargaDatos: aMatricula
+	nombre := Prompter prompt: 'Ingrese el nombre del médico a ingresar'.
+	apellido := Prompter prompt: 'Ingrese el apellido del médico a ingresar'.
+	matricula:= aMatricula. 
+	especialidad := Prompter prompt: 'Ingrese la especialidad del médico a ingresar'.
+	condicion:=Prompter prompt: 'Ingrese disponibilidad. 1-disponible/2-No disponible'.
 !
 
 condicion
@@ -186,6 +194,7 @@ nombre: anObject
 apellido!accessing!private! !
 apellido:!accessing!private! !
 cargaDatos!public! !
+cargaDatos:!public! !
 condicion!accessing!private! !
 condicion:!accessing!private! !
 especialidad!accessing!private! !
@@ -406,25 +415,28 @@ altaIntervencion
 		!
 
 cargaDatos
-|opc paciente intervencion medico complejo op|
+|opc paciente intervencion matricula dni cod var medico complejo op|
 opc:=(Prompter prompt: '1-Ingresar Pacientes/2-Ingresar Medico/ 3-Ingresar Intervenciones') asNumber .
 (opc=1) ifTrue: [
-			op:= Prompter prompt: 'El paciente tiene obra? 1-Si/2-No'.
+			op:= Prompter prompt: 'El paciente tiene obra social? 1-Si/2-No'.
 			(op='1') ifTrue:[paciente:= PacienteConObra new] ifFalse:[paciente:= Paciente new].
 			paciente inicializa.
-			paciente cargaDatos.
-			pacientes detect:[:ele | ele dni= paciente dni] ifNone:[pacientes add:paciente. MessageBox notify: 'Paciente cargado con éxito'].       
+			dni:=Prompter prompt:'Ingrese dni del paciente a cargar'.
+			var:=(pacientes detect:[:ele | ele dni= dni] ifNone:[paciente cargaDatos:dni .pacientes add:paciente. MessageBox notify: 'Paciente cargado con éxito']).
+			(var isNil) ifFalse: [MessageBox notify: 'paciente ya se encuentra cargado'].
 			].
 (opc=2) ifTrue: [
 			medico:=Medico new.
-			medico cargaDatos.
-			medicos detect:[:ele | ele matricula= medico matricula] ifNone:[medicos add:medico. MessageBox notify: 'Médico cargado con éxito'].
+			matricula:=Prompter prompt:'Ingrese la matricula del médico a cargar'.
+			var:=(medicos detect:[:ele | ele matricula= matricula] ifNone:[medico cargaDatos:matricula. medicos add:medico. MessageBox notify: 'Médico cargado con éxito']).
+			(var isNil) ifFalse:[MessageBox notify:'El médico ya se encuentra'].
 			].
 (opc=3) ifTrue: [
 			complejo:=Prompter prompt: '¿La intervención es de alta complejidad? 1-Si/2-No'.
 			(complejo='1') ifTrue: [intervencion := AltaComplejidad new] ifFalse:[intervencion :=Intervencion new].
-			intervencion cargaDatos.
-			intervenciones add:intervencion.
+			cod:= Prompter prompt: 'Ingrese el codigo de la intervención a cargar'.
+			var:=(intervenciones detect:[:elem | elem codigo = cod] ifNone:[intervencion cargaDatos: cod. intervenciones add:intervencion. MessageBox notify:'Intervención cargada con éxito']).
+			(var isNil) ifFalse:[MessageBox notify:'La intervención ya se encuentra'].
 			].
 
 
