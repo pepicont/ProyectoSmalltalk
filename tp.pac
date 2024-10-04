@@ -453,7 +453,7 @@ inicializa
 	pacientes:= OrderedCollection new.
 	medicos:= OrderedCollection new.
 	intervenciones:= OrderedCollection new.
-	AltaComplejidad inicializar. "PREGUNTAR A AGUS QUÉ ES ESTO"
+	AltaComplejidad inicializar. 
 	Operacion inicializar. "agregado"!
 
 intervenciones
