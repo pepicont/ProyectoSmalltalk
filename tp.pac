@@ -282,11 +282,11 @@ AumentoIdentificador
 Identificador:=Identificador+1.
 !
 
-inicializar
+Inicializar
 	Identificador:=0.! !
 !Operacion class categoriesForMethods!
 AumentoIdentificador!public! !
-inicializar!public! !
+Inicializar!public! !
 !
 
 Paciente guid: (GUID fromString: '{217f8510-1557-4bcb-b9a6-bda460760c44}')!
@@ -443,7 +443,7 @@ inicializa
 	medicos:= OrderedCollection new.
 	intervenciones:= OrderedCollection new.
 	AltaComplejidad Inicializar. "Inicializa el porcentaje de recargo que tienen las operaciones de este tipo"
-	Operacion inicializar. "Inicializamos el contador para los id en 0"!
+	Operacion Inicializar. "Inicializamos el contador para los id en 0"!
 
 intervenciones
 	^intervenciones!
